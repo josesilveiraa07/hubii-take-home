@@ -1,8 +1,50 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/hubii-take-home/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/hubii-take-home/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/hubii-take-home",
+  "projects": {
+    "api-gateway": {
+      "type": "application",
+      "root": "apps/api-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
+      }
+    },
+    "hubii-take-home": {
+      "type": "application",
+      "root": "apps/hubii-take-home",
+      "entryFile": "main",
+      "sourceRoot": "apps/hubii-take-home/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/hubii-take-home/tsconfig.app.json"
+      }
+    },
+    "orders": {
+      "type": "application",
+      "root": "apps/orders",
+      "entryFile": "main",
+      "sourceRoot": "apps/orders/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/orders/tsconfig.app.json"
+      }
+    },
+    "products": {
+      "type": "application",
+      "root": "apps/products",
+      "entryFile": "main",
+      "sourceRoot": "apps/products/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/products/tsconfig.app.json"
+      }
+    }
   }
 }
