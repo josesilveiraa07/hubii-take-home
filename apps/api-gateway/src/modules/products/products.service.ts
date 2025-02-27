@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateProductDto } from 'apps/products/src/dto/create-product.dto';
+import { UpdateProductDto } from 'apps/products/src/dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -14,5 +15,17 @@ export class ProductsService {
 
   findAll() {
     return this.productsClient.send('products.findAll', {});
+  }
+
+  findOneById(id: string) {
+    return this.productsClient.send('products.findOne', id);
+  }
+
+  update(id: string, data: UpdateProductDto) {
+    return this.productsClient.send('products.update', { ...data, id });
+  }
+
+  delete(id: string) {
+    return this.productsClient.send('products.delete', id);
   }
 }
