@@ -120,6 +120,14 @@ describe('ProductsController', () => {
       );
     });
 
+    it('should throw if the product is not found', async () => {
+      const id = crypto.randomUUID();
+
+      mockProductsRepository.findOneById.mockResolvedValueOnce(null);
+
+      await expect(productsController.findOneById(id)).rejects.toThrow();
+    });
+
     it('should update a product', async () => {
       const product = new Product({
         id: crypto.randomUUID(),
@@ -166,6 +174,24 @@ describe('ProductsController', () => {
       });
       expect(result.description).toEqual(input.description);
       expect(result.stockAmount).toEqual(input.stockAmount);
+    });
+
+    it('should not update a non-existing product', async () => {
+      const input = {
+        description: 'Product description updated',
+        name: 'Product name updated',
+        price: 150.5,
+        stockAmount: 60,
+      };
+
+      mockProductsRepository.update.mockResolvedValueOnce(null);
+
+      await expect(
+        productsController.update({
+          ...input,
+          id: crypto.randomUUID(),
+        }),
+      ).rejects.toThrow();
     });
 
     it('should delete a product', async () => {
