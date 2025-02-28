@@ -59,7 +59,6 @@ describe('FindOrderUseCase', () => {
 
       const result = await useCase.execute(orderId);
 
-      // Verificações
       expect(mockOrdersRepository.findOneById).toHaveBeenCalledWith(orderId);
       expect(result).toEqual(mockOrder);
     });

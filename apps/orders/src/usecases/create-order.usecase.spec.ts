@@ -138,7 +138,6 @@ describe('CreateOrderUseCase', () => {
 
       const result = await useCase.execute(createOrderDto);
 
-      // Verificações
       expect(mockProductsService.findOneById).toHaveBeenCalledTimes(2);
       expect(mockProductsService.subtractFromStock).toHaveBeenCalledTimes(2);
       expect(mockDeliveryCalculationService.calculatePrice).toHaveBeenCalled();

@@ -76,12 +76,10 @@ describe('OrdersController', () => {
         },
       };
 
-      // Definindo o comportamento do mock
       mockCreateOrderUseCase.execute.mockResolvedValue(expectedResult);
 
       const result = await controller.create(createOrderDto);
 
-      // Verificações
       expect(mockCreateOrderUseCase.execute).toHaveBeenCalledWith(
         createOrderDto,
       );

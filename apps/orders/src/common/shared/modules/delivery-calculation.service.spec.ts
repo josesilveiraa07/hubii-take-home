@@ -1,4 +1,4 @@
-import { createMock } from '@golevelup/ts-jest'; // Importando createMock
+import { createMock } from '@golevelup/ts-jest';
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { of } from 'rxjs';
