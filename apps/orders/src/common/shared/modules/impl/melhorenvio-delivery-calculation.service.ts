@@ -67,7 +67,7 @@ export class MelhorEnvioDeliveryCalculationService
               curr.delivery_time === 1
                 ? '1 dia útil'
                 : `${curr.delivery_time} dias úteis`,
-            price: curr.price,
+            price: Number(curr.price),
           };
         }
 

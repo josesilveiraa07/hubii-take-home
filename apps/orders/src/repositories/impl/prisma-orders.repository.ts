@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaDatabaseProvider } from '../../database/providers/prisma-database.provider';
+import { PrismaDatabaseProvider } from 'libs/common/database/providers/prisma-database.provider';
 import { CreateOrderDto } from '../../dto/create-order.dto';
 import { Order } from '../../entities/order.entity';
 import { OrdersRepository } from '../orders.repository';
@@ -19,7 +19,7 @@ export class PrismaOrdersRepository implements OrdersRepository {
             quantity: item.quantity,
           })),
         },
-        deliveryOptions: {
+        deliveryOptions: data.deliveryOptions && {
           create: data.deliveryOptions.map((option) => ({
             companyName: option.companyName,
             price: option.price,
@@ -40,6 +40,7 @@ export class PrismaOrdersRepository implements OrdersRepository {
             id: true,
             companyName: true,
             estimatedArrival: true,
+            price: true,
           },
         },
       },

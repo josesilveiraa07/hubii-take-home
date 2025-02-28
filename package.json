@@ -9,14 +9,18 @@
     "schema": "prisma/schema.prisma"
   },
   "scripts": {
-    "build": "nest build",
+    "build": "nest build --all",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "dotenv -e .env.development -D nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/apps/hubii-take-home/main",
+    "start:api-gateway:dev": "nest start api-gateway --watch",
+    "start:orders:dev": "nest start orders --watch",
+    "start:products:dev": "nest start products --watch",
+    "start:api-gateway:prod": "node dist/apps/api-gateway/main",
+    "start:orders:prod": "node dist/apps/orders/main",
+    "start:products:prod": "node dist/apps/products/main",
     "db:migrate:dev": "dotenv -e .env.development -- prisma migrate dev",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "compose:dev": "docker-compose -f docker-compose.development.yaml up",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -84,6 +88,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "moduleNameMapper": {
+      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
       "apps/(.*)": "<rootDir>/apps/$1"
     },
     "collectCoverageFrom": [
@@ -92,7 +97,8 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
     ]
   }
 }
