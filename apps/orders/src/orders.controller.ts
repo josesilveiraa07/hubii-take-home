@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
-import { OrdersService } from './orders.service';
+import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { CreateOrderUseCase } from './usecases';
 
 @Controller()
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(private readonly createOrderUseCase: CreateOrderUseCase) {}
 
-  @Get()
-  getHello(): string {
-    return this.ordersService.getHello();
+  @MessagePattern('orders.create')
+  async create(data: CreateOrderDto) {
+    return await this.createOrderUseCase.execute(data);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { ProductsRepository } from '../repositories/products.repository';
 
@@ -10,7 +10,7 @@ export class DeleteProductUseCase {
     const product = await this.productsRepository.findOneById(id);
 
     if (!product) {
-      throw new RpcException('Product not found');
+      throw new RpcException(new NotFoundException('Product not found'));
     }
 
     await this.productsRepository.delete(id);

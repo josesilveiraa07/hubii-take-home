@@ -10,6 +10,10 @@ export class PrismaProductsMapper implements ProductsMapper {
       description: row.description,
       price: row.price,
       stockAmount: row.stockAmount,
+      weight: row.weight,
+      height: row.height,
+      width: row.width,
+      length: row.length,
     });
 
     return product;

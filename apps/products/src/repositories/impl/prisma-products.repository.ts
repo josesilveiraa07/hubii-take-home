@@ -20,6 +20,10 @@ export class PrismaProductsRepository implements ProductsRepository {
         description: data.description,
         price: data.price,
         stockAmount: data.stockAmount,
+        height: data.height,
+        length: data.length,
+        weight: data.weight,
+        width: data.width,
       },
     });
 

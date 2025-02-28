@@ -21,4 +21,16 @@ export class CreateProductDto {
   @IsInt()
   @IsPositive()
   stockAmount: number;
+
+  @IsNumber()
+  height: number;
+
+  @IsNumber()
+  width: number;
+
+  @IsNumber()
+  length: number;
+
+  @IsNumber()
+  weight: number;
 }

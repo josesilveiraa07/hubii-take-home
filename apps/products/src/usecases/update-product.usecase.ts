@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { ProductsRepository } from '../repositories/products.repository';
@@ -11,7 +11,7 @@ export class UpdateProductUseCase {
     const result = await this.productsRepository.update(input.id, input);
 
     if (!result) {
-      throw new RpcException('Product not found');
+      throw new RpcException(new NotFoundException('Product not found'));
     }
 
     return result;
