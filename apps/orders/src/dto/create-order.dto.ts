@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsInt,
@@ -17,6 +18,12 @@ class OrderItemDto {
   quantity: number;
 }
 
+class OrderDeliveryOption {
+  companyName: string;
+  price: number;
+  estimatedArrival: string;
+}
+
 export class CreateOrderDto {
   @ValidateNested({ each: true })
   @Type(() => OrderItemDto)
@@ -29,4 +36,7 @@ export class CreateOrderDto {
   @IsString()
   @IsNotEmpty()
   destinationZipcode: string;
+
+  @ApiHideProperty()
+  deliveryOptions: OrderDeliveryOption[];
 }

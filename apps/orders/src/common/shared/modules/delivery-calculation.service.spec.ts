@@ -47,7 +47,7 @@ describe('MelhorEnvioDeliveryCalculationService', () => {
             id: 1,
             name: 'Transportadora A',
           },
-          price: '50.00',
+          price: 50.0,
           currency: 'R$',
           delivery_time: 5,
         },
@@ -57,7 +57,7 @@ describe('MelhorEnvioDeliveryCalculationService', () => {
             id: 2,
             name: 'Transportadora B',
           },
-          price: '60.00',
+          price: 60.0,
           currency: 'R$',
           delivery_time: 3,
         },
@@ -85,11 +85,11 @@ describe('MelhorEnvioDeliveryCalculationService', () => {
       expect(result).toEqual({
         'Transportadora A': {
           deliveryTime: '5 dias úteis',
-          price: 'R$50.00',
+          price: 50.0,
         },
         'Transportadora B': {
           deliveryTime: '3 dias úteis',
-          price: 'R$60.00',
+          price: 60.0,
         },
       });
 

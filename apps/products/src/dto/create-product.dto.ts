@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsPositive,
   IsString,
+  Min,
 } from 'class-validator';
 
 export class CreateProductDto {
@@ -23,14 +24,18 @@ export class CreateProductDto {
   stockAmount: number;
 
   @IsNumber()
+  @Min(1)
   height: number;
 
   @IsNumber()
+  @Min(1)
   width: number;
 
   @IsNumber()
+  @Min(1)
   length: number;
 
   @IsNumber()
+  @Min(1)
   weight: number;
 }

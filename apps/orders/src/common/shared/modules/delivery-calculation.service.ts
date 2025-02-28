@@ -6,5 +6,5 @@ export abstract class DeliveryCalculationService {
     height: number;
     width: number;
     length: number;
-  }): Promise<Record<string, { deliveryTime: string; price: string }>>;
+  }): Promise<Record<string, { deliveryTime: string; price: number }>>;
 }

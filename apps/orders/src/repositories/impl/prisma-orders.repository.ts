@@ -19,6 +19,13 @@ export class PrismaOrdersRepository implements OrdersRepository {
             quantity: item.quantity,
           })),
         },
+        deliveryOptions: {
+          create: data.deliveryOptions.map((option) => ({
+            companyName: option.companyName,
+            price: option.price,
+            estimatedArrival: option.estimatedArrival,
+          })),
+        },
       },
     });
   }
@@ -26,7 +33,16 @@ export class PrismaOrdersRepository implements OrdersRepository {
   async findOneById(id: string): Promise<Order | null> {
     return await this.prisma.order.findUnique({
       where: { id },
-      include: { items: { include: { product: true } } },
+      include: {
+        items: { include: { product: true } },
+        deliveryOptions: {
+          select: {
+            id: true,
+            companyName: true,
+            estimatedArrival: true,
+          },
+        },
+      },
     });
   }
 }

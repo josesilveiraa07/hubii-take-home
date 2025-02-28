@@ -27,14 +27,20 @@ export class ProductsController {
 
   /** Criar um produto */
   @Post()
-  @ApiCreatedResponse({ type: Product })
+  @ApiCreatedResponse({
+    type: Product,
+    description: 'Retorna o produto criado',
+  })
   create(@Body() data: CreateProductDto) {
     return this.productsService.create(data);
   }
 
   /** Ler todos os produtos */
   @Get()
-  @ApiOkResponse({ type: FindProductsResponseDto })
+  @ApiOkResponse({
+    type: FindProductsResponseDto,
+    description: 'Retorna os produtos retornados e a contagem',
+  })
   findAll() {
     return this.productsService.findAll();
   }

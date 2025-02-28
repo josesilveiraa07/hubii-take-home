@@ -29,7 +29,7 @@ export class MelhorEnvioDeliveryCalculationService
     height: number;
     width: number;
     length: number;
-  }): Promise<Record<string, { deliveryTime: string; price: string }>> {
+  }): Promise<Record<string, { deliveryTime: string; price: number }>> {
     const { data: responseData } = await firstValueFrom(
       this.httpService.post<MelhorEnvioShipmentCalculateResponseDto[]>(
         `${this.baseUrl}/me/shipment/calculate`,
@@ -67,13 +67,13 @@ export class MelhorEnvioDeliveryCalculationService
               curr.delivery_time === 1
                 ? '1 dia útil'
                 : `${curr.delivery_time} dias úteis`,
-            price: `${curr.currency}${curr.price}`,
+            price: curr.price,
           };
         }
 
         return acc;
       },
-      {} as Record<string, { deliveryTime: string; price: string }>,
+      {} as Record<string, { deliveryTime: string; price: number }>,
     );
   }
 }

@@ -65,7 +65,20 @@ export class CreateOrderUseCase {
         destination: input.destinationZipcode,
       });
 
-    const order = await this.ordersRepository.create(input);
+    const deliveryOptions = Object.keys(deliveryDetails).map(
+      (companyName: string) => {
+        return {
+          companyName,
+          price: deliveryDetails[companyName].price,
+          estimatedArrival: deliveryDetails[companyName].deliveryTime,
+        };
+      },
+    );
+
+    const order = await this.ordersRepository.create({
+      ...input,
+      deliveryOptions,
+    });
 
     return {
       order,
