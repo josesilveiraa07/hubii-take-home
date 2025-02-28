@@ -1,11 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { OrderItem } from './order-item.entity';
 
+export class OrderDeliveryOptions {
+  id: string;
+  companyName: string;
+  estimatedArrival: string;
+  price: number;
+}
+
 export class Order {
   id: string;
 
   @ApiProperty({ type: [OrderItem] })
   items?: OrderItem[];
+  deliveryOptions?: OrderDeliveryOptions[];
 
   createdAt: Date;
   updatedAt: Date;
