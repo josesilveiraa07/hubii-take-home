@@ -35,6 +35,13 @@ export class CreateOrderUseCase {
         );
       }
 
+      await firstValueFrom(
+        this.productsService.subtractFromStock({
+          productId: item.productId,
+          amount: item.quantity,
+        }),
+      );
+
       const itemVolume = product.height * product.width * product.length;
 
       volume += itemVolume;

@@ -28,8 +28,6 @@ import { MelhorEnvioDeliveryCalculationService } from './impl/melhorenvio-delive
           throw new Error(`Provider for ${provider} is not registered`);
         }
 
-        console.log(providers[provider]);
-
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return providers[provider];
       },

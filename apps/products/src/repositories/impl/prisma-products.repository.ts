@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaDatabaseProvider } from '../../database/providers/prisma-database.provider';
 import { CreateProductDto } from '../../dto/create-product.dto';
+import { SubtractFromStockDto } from '../../dto/subtract-from-stock.dto';
 import { UpdateProductDto } from '../../dto/update-product.dto';
 import { Product } from '../../entities/product.entity';
 import { ProductsMapper } from '../../mappers/products/products.mapper';
@@ -66,6 +67,19 @@ export class PrismaProductsRepository implements ProductsRepository {
     await this.prisma.product.delete({
       where: {
         id,
+      },
+    });
+  }
+
+  async subtractStock(data: SubtractFromStockDto): Promise<Product> {
+    return await this.prisma.product.update({
+      where: {
+        id: data.productId,
+      },
+      data: {
+        stockAmount: {
+          increment: -data.amount,
+        },
       },
     });
   }

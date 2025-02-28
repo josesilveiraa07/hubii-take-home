@@ -1,12 +1,14 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { CreateProductDto } from './dto/create-product.dto';
+import { SubtractFromStockDto } from './dto/subtract-from-stock.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import {
   CreateProductUseCase,
   DeleteProductUseCase,
   FindProductsUseCase,
   FindProductUseCase,
+  SubtractFromStockUseCase,
 } from './usecases';
 import { UpdateProductUseCase } from './usecases/update-product.usecase';
 
@@ -18,6 +20,7 @@ export class ProductsController {
     private readonly findProductUseCase: FindProductUseCase,
     private readonly updateProductUseCase: UpdateProductUseCase,
     private readonly deleteProductUseCase: DeleteProductUseCase,
+    private readonly subtractFromStockUseCase: SubtractFromStockUseCase,
   ) {}
 
   @MessagePattern('products.create')
@@ -43,5 +46,10 @@ export class ProductsController {
   @MessagePattern('products.delete')
   async delete(id: string) {
     return await this.deleteProductUseCase.execute(id);
+  }
+
+  @MessagePattern('products.subtractStock')
+  async subtractStock(data: SubtractFromStockDto) {
+    return await this.subtractFromStockUseCase.execute(data);
   }
 }
