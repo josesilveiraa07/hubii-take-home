@@ -10,6 +10,7 @@ import {
   DeleteProductUseCase,
   FindProductsUseCase,
   FindProductUseCase,
+  SubtractFromStockUseCase,
 } from './usecases';
 import { UpdateProductUseCase } from './usecases/update-product.usecase';
 
@@ -27,6 +28,7 @@ describe('ProductsController', () => {
         FindProductUseCase,
         UpdateProductUseCase,
         DeleteProductUseCase,
+        SubtractFromStockUseCase,
         { provide: ProductsRepository, useValue: mockProductsRepository },
       ],
     }).compile();
@@ -41,6 +43,10 @@ describe('ProductsController', () => {
         name: 'Product name',
         price: 100.5,
         stockAmount: 50,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
       };
 
       const product = new Product({
@@ -49,6 +55,10 @@ describe('ProductsController', () => {
         name: input.name,
         price: input.price,
         stockAmount: input.stockAmount,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
       });
 
       mockProductsRepository.create.mockResolvedValue(product);
@@ -68,6 +78,10 @@ describe('ProductsController', () => {
         name: 'Product name',
         price: 100.5,
         stockAmount: 50,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
       });
 
       const products = [product];
@@ -90,6 +104,10 @@ describe('ProductsController', () => {
         name: 'Product name',
         price: 100.5,
         stockAmount: 50,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
       });
 
       mockProductsRepository.findOneById.mockResolvedValue(product);
@@ -109,6 +127,10 @@ describe('ProductsController', () => {
         name: 'Product name',
         price: 100.5,
         stockAmount: 50,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
       });
 
       const input = {
@@ -124,6 +146,10 @@ describe('ProductsController', () => {
         name: input.name,
         price: input.price,
         stockAmount: input.stockAmount,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
       });
 
       mockProductsRepository.update.mockResolvedValue(updatedProduct);
@@ -149,6 +175,10 @@ describe('ProductsController', () => {
         name: 'Product name',
         price: 100.5,
         stockAmount: 50,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
       });
 
       const result = await productsController.delete(product.id);
@@ -159,6 +189,84 @@ describe('ProductsController', () => {
       expect(mockProductsRepository.findOneById).toHaveBeenCalledWith(
         product.id,
       );
+    });
+
+    it('should subtract from stock amount', async () => {
+      const product = new Product({
+        id: crypto.randomUUID(),
+        description: 'Product description',
+        name: 'Product name',
+        price: 100.5,
+        stockAmount: 50,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
+      });
+
+      const quantity = 10;
+
+      const updatedProduct = new Product({
+        id: product.id,
+        description: product.description,
+        name: product.name,
+        price: product.price,
+        stockAmount: product.stockAmount - quantity,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
+      });
+
+      mockProductsRepository.subtractStock.mockResolvedValue(updatedProduct);
+
+      const result = await productsController.subtractStock({
+        productId: product.id,
+        amount: quantity,
+      });
+
+      expect(result).toEqual(updatedProduct);
+      expect(mockProductsRepository.subtractStock).toHaveBeenCalledWith({
+        productId: product.id,
+        amount: quantity,
+      });
+    });
+
+    it('should not subtract if stock amount is less than quantity', async () => {
+      const product = new Product({
+        id: crypto.randomUUID(),
+        description: 'Product description',
+        name: 'Product name',
+        price: 100.5,
+        stockAmount: 50,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
+      });
+
+      const quantity = 60;
+
+      const updatedProduct = new Product({
+        id: product.id,
+        description: product.description,
+        name: product.name,
+        price: product.price,
+        stockAmount: product.stockAmount - quantity,
+        width: 10,
+        height: 10,
+        length: 10,
+        weight: 10,
+      });
+
+      mockProductsRepository.subtractStock.mockResolvedValue(updatedProduct);
+
+      await expect(
+        productsController.subtractStock({
+          productId: product.id,
+          amount: quantity,
+        }),
+      ).rejects.toThrow();
     });
   });
 });
