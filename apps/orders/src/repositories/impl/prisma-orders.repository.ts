@@ -22,4 +22,11 @@ export class PrismaOrdersRepository implements OrdersRepository {
       },
     });
   }
+
+  async findOneById(id: string): Promise<Order | null> {
+    return await this.prisma.order.findUnique({
+      where: { id },
+      include: { items: { include: { product: true } } },
+    });
+  }
 }
