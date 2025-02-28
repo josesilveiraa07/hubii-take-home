@@ -38,5 +38,5 @@ export class CreateOrderDto {
   destinationZipcode: string;
 
   @ApiHideProperty()
-  deliveryOptions: OrderDeliveryOption[];
+  deliveryOptions?: OrderDeliveryOption[];
 }
