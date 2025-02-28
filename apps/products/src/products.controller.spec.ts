@@ -1,15 +1,17 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule } from 'libs/common/database/database.module';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductsController } from './products.controller';
 import { ProductsRepository } from './repositories/products.repository';
 import {
+  AddToStockUseCase,
   CreateProductUseCase,
   DeleteProductUseCase,
   FindProductsUseCase,
   FindProductUseCase,
+  RemoveFromStockUseCase,
   SubtractFromStockUseCase,
 } from './usecases';
 import { UpdateProductUseCase } from './usecases/update-product.usecase';
@@ -29,6 +31,8 @@ describe('ProductsController', () => {
         UpdateProductUseCase,
         DeleteProductUseCase,
         SubtractFromStockUseCase,
+        AddToStockUseCase,
+        RemoveFromStockUseCase,
         { provide: ProductsRepository, useValue: mockProductsRepository },
       ],
     }).compile();

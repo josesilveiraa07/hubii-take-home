@@ -10,5 +10,9 @@ export abstract class ProductsRepository {
   abstract update(id: string, data: UpdateProductDto): Promise<Product | null>;
   abstract delete(id: string): Promise<void>;
   abstract subtractStock(data: SubtractFromStockDto): Promise<Product>;
+  abstract incrementOrDecrementStock(
+    id: string,
+    quantity: number,
+  ): Promise<Product>;
   abstract count(): Promise<number>;
 }

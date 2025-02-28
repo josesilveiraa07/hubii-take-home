@@ -28,4 +28,12 @@ export class ProductsService {
   delete(id: string) {
     return this.productsClient.send('products.delete', id);
   }
+
+  addToStock(id: string, quantity: number) {
+    return this.productsClient.send('products.addStock', { id, quantity });
+  }
+
+  removeFromStock(id: string, quantity: number) {
+    return this.productsClient.send('products.removeStock', { id, quantity });
+  }
 }

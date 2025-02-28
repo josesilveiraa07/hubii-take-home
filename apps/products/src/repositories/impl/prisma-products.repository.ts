@@ -72,6 +72,22 @@ export class PrismaProductsRepository implements ProductsRepository {
     });
   }
 
+  async incrementOrDecrementStock(
+    id: string,
+    quantity: number,
+  ): Promise<Product> {
+    return await this.prisma.product.update({
+      where: {
+        id,
+      },
+      data: {
+        stockAmount: {
+          increment: quantity,
+        },
+      },
+    });
+  }
+
   async count(): Promise<number> {
     return await this.prisma.product.count();
   }

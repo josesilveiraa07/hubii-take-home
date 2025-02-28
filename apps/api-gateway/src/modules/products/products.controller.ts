@@ -17,7 +17,9 @@ import {
 import { CreateProductDto } from '../../../../products/src/dto/create-product.dto';
 import { UpdateProductDto } from '../../../../products/src/dto/update-product.dto';
 import { Product } from '../../../../products/src/entities/product.entity';
+import { AddStockDto } from './dto/add-stock.dto';
 import { FindProductsResponseDto } from './dto/find-products-response.dto';
+import { RemoveFromStockDto } from './dto/remove-from-stock.dto';
 import { ProductsService } from './products.service';
 
 @Controller('products')
@@ -58,5 +60,23 @@ export class ProductsController {
   @ApiNoContentResponse({ description: 'Produto deletado com sucesso' })
   update(@Param('id') id: string, @Body() data: UpdateProductDto) {
     return this.productsService.update(id, data);
+  }
+
+  /** Adicionar ao estoque do produto */
+  @Post(':id/stock')
+  @ApiCreatedResponse({
+    type: Product,
+    description: 'Retorna o produto com a quantidade atualizada',
+  })
+  addStock(@Param('id') id: string, @Body() data: AddStockDto) {
+    return this.productsService.addToStock(id, data.amount);
+  }
+
+  /** Subtrair estoque do produto */
+  @Delete(':id/stock')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiNoContentResponse({ description: 'Estoque removido com sucesso' })
+  removeStock(@Param('id') id: string, @Body() data: RemoveFromStockDto) {
+    return this.productsService.removeFromStock(id, data.amount);
   }
 }
