@@ -8,8 +8,8 @@ export class Product {
   height: number;
   length: number;
   stockAmount: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   constructor(props: Product) {
     Object.assign(this, props);

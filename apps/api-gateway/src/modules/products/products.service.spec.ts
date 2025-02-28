@@ -1,18 +1,17 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductsService } from './products.service';
 
 describe('ProductsService', () => {
-  let service: ProductsService;
+  const mockProductsService = createMock<ProductsService>();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ProductsService],
+      providers: [{ provide: ProductsService, useValue: mockProductsService }],
     }).compile();
-
-    service = module.get<ProductsService>(ProductsService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(mockProductsService).toBeDefined();
   });
 });

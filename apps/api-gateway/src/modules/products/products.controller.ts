@@ -14,9 +14,9 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Product } from 'apps/products/src/entities/product.entity';
 import { CreateProductDto } from '../../../../products/src/dto/create-product.dto';
 import { UpdateProductDto } from '../../../../products/src/dto/update-product.dto';
+import { Product } from '../../../../products/src/entities/product.entity';
 import { FindProductsResponseDto } from './dto/find-products-response.dto';
 import { ProductsService } from './products.service';
 
