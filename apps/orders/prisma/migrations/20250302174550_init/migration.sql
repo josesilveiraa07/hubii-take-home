@@ -1,18 +1,3 @@
-/*
-  Warnings:
-
-  - Added the required column `height` to the `products` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `length` to the `products` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `weight` to the `products` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `width` to the `products` table without a default value. This is not possible if the table is not empty.
-
-*/
--- AlterTable
-ALTER TABLE "products" ADD COLUMN     "height" DOUBLE PRECISION NOT NULL,
-ADD COLUMN     "length" DOUBLE PRECISION NOT NULL,
-ADD COLUMN     "weight" DOUBLE PRECISION NOT NULL,
-ADD COLUMN     "width" DOUBLE PRECISION NOT NULL;
-
 -- CreateTable
 CREATE TABLE "orders" (
     "id" TEXT NOT NULL,
@@ -22,6 +7,19 @@ CREATE TABLE "orders" (
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "order_delivery_options" (
+    "id" TEXT NOT NULL,
+    "order_id" TEXT NOT NULL,
+    "company_name" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "estimated_arrival" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "order_delivery_options_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -47,7 +45,7 @@ CREATE TABLE "_OrderToOrderItem" (
 CREATE INDEX "_OrderToOrderItem_B_index" ON "_OrderToOrderItem"("B");
 
 -- AddForeignKey
-ALTER TABLE "order_items" ADD CONSTRAINT "order_items_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "order_delivery_options" ADD CONSTRAINT "order_delivery_options_order_id_fkey" FOREIGN KEY ("order_id") REFERENCES "orders"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_OrderToOrderItem" ADD CONSTRAINT "_OrderToOrderItem_A_fkey" FOREIGN KEY ("A") REFERENCES "orders"("id") ON DELETE CASCADE ON UPDATE CASCADE;

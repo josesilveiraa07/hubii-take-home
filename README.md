@@ -1,6 +1,4 @@
-# Requisitos Funcionais
-
-## Set-up inicial
+# Set-up inicial
 
 ```bash
 $ git clone https://github.com/josesilveiraa07/hubii-take-home # clona o repositório
@@ -10,6 +8,8 @@ $ git clone https://github.com/josesilveiraa07/hubii-take-home # clona o reposit
    no mesmo lugar dos arquivos mencionados, mas com o nome .env.development.
 2. Alterar os valores das variáveis de ambiente.
 
+OBS: o único DELIVERY_PROVIDER suportado é o valor melhorenvio
+
 ```bash
 $ cd hubii-take-home # entra no diretório do repositório
 $ pnpm install # instala as dependências utilizando o pnpm
@@ -17,6 +17,9 @@ $ pnpm compose:dev # roda todos os containers necessários para a aplicação su
 ```
 
 Após esses passos, a documentação com tipos e retornos estará disponível no endereço http://localhost:3000/docs.
+O projeto conta com 100% do código coberto por testes.
+
+# Requisitos Funcionais
 
 ## Microsserviço de Produtos
 

@@ -1,4 +1,4 @@
-import { PrismaDatabaseProvider } from '@app/database/providers/prisma-database.provider';
+import { PrismaProductsDatabaseProvider } from '@app/database/providers/prisma-products-database.provider';
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from '../../dto/create-product.dto';
 import { SubtractFromStockDto } from '../../dto/subtract-from-stock.dto';
@@ -8,7 +8,7 @@ import { ProductsRepository } from '../products.repository';
 
 @Injectable()
 export class PrismaProductsRepository implements ProductsRepository {
-  constructor(private readonly prisma: PrismaDatabaseProvider) {}
+  constructor(private readonly prisma: PrismaProductsDatabaseProvider) {}
 
   async create(data: CreateProductDto): Promise<Product> {
     return await this.prisma.product.create({

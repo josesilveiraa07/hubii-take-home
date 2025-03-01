@@ -6,12 +6,15 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -51,14 +54,20 @@ export class ProductsController {
   /** Ler produto pelo ID */
   @Get(':id')
   @ApiOkResponse({ type: Product, description: 'Retorna o produto encontrado' })
-  findOne(@Param('id') id: string) {
+  @ApiNotFoundResponse({ description: 'Produto não encontrado' })
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.findOneById(id);
   }
 
   /** Atualizar um produto pelo ID */
   @Patch(':id')
   @ApiOkResponse({ type: Product, description: 'Retorna o produto atualizado' })
-  update(@Param('id') id: string, @Body() data: UpdateProductDto) {
+  @ApiNotFoundResponse({ description: 'Produto não encontrado' })
+  @ApiBadRequestResponse({ description: 'Requisição inválida' })
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateProductDto,
+  ) {
     return this.productsService.update(id, data);
   }
 
@@ -66,7 +75,7 @@ export class ProductsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse({ description: 'Produto deletado com sucesso' })
-  delete(@Param('id') id: string) {
+  delete(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.delete(id);
   }
 
@@ -76,7 +85,9 @@ export class ProductsController {
     type: Product,
     description: 'Retorna o produto com a quantidade atualizada',
   })
-  addStock(@Param('id') id: string, @Body() data: AddStockDto) {
+  @ApiNotFoundResponse({ description: 'Produto não encontrado' })
+  @ApiBadRequestResponse({ description: 'Requisição inválida' })
+  addStock(@Param('id', ParseUUIDPipe) id: string, @Body() data: AddStockDto) {
     return this.productsService.addToStock(id, data.amount);
   }
 
@@ -84,7 +95,12 @@ export class ProductsController {
   @Delete(':id/stock')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse({ description: 'Estoque removido com sucesso' })
-  removeStock(@Param('id') id: string, @Body() data: RemoveFromStockDto) {
+  @ApiNotFoundResponse({ description: 'Produto não encontrado' })
+  @ApiBadRequestResponse({ description: 'Requisição inválida' })
+  removeStock(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: RemoveFromStockDto,
+  ) {
     return this.productsService.removeFromStock(id, data.amount);
   }
 }

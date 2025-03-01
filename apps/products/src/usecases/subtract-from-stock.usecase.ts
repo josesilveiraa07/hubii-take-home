@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { SubtractFromStockDto } from '../dto/subtract-from-stock.dto';
 import { ProductsRepository } from '../repositories/products.repository';
@@ -11,11 +15,11 @@ export class SubtractFromStockUseCase {
     const product = await this.productsRepository.findOneById(data.productId);
 
     if (!product) {
-      throw new RpcException('Product not found');
+      throw new RpcException(new NotFoundException('Product not found'));
     }
 
     if (product.stockAmount < data.amount) {
-      throw new RpcException('Not enough stock');
+      throw new RpcException(new BadRequestException('Not enough stock'));
     }
 
     return await this.productsRepository.subtractStock(data);

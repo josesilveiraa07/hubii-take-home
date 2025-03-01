@@ -1,18 +1,24 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ProductsService } from './products.service';
 
 @Module({
   imports: [
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'PRODUCTS_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: ['amqp://guest:guest@rabbitmq:5672'],
-          queue: 'products_queue',
-          queueOptions: { durable: false },
-        },
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URL')!],
+            queue: configService.get<string>('RABBITMQ_PRODUCTS_QUEUE'),
+            queueOptions: {
+              durable: false,
+            },
+          },
+        }),
       },
     ]),
   ],

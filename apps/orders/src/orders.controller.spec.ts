@@ -4,11 +4,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersController } from './orders.controller';
 import { CreateOrderUseCase, FindOrderUseCase } from './usecases';
+import { FindOrdersUseCase } from './usecases/find-orders.usecase';
 
 describe('OrdersController', () => {
   let controller: OrdersController;
   const mockCreateOrderUseCase = createMock<CreateOrderUseCase>();
   const mockFindOrderUseCase = createMock<FindOrderUseCase>();
+  const mockFindOrdersUseCase = createMock<FindOrdersUseCase>();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,6 +23,10 @@ describe('OrdersController', () => {
         {
           provide: FindOrderUseCase,
           useValue: mockFindOrderUseCase,
+        },
+        {
+          provide: FindOrdersUseCase,
+          useValue: mockFindOrdersUseCase,
         },
       ],
     }).compile();
@@ -142,6 +148,42 @@ describe('OrdersController', () => {
       await expect(controller.findOneById(orderId)).rejects.toThrow(
         RpcException,
       );
+    });
+  });
+
+  describe('findAll', () => {
+    it('should call FindOrdersUseCase.execute', async () => {
+      const expectedResult = [
+        {
+          id: '1',
+          originZipcode: '12345-678',
+          destinationZipcode: '87654-321',
+          items: [
+            {
+              id: 'item-1',
+              productId: '1',
+              quantity: 2,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          ],
+          deliveryOptions: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+
+      const count = expectedResult.length;
+
+      mockFindOrdersUseCase.execute.mockResolvedValue({
+        results: expectedResult,
+        count,
+      });
+
+      const result = await controller.findAll();
+
+      expect(mockFindOrdersUseCase.execute).toHaveBeenCalled();
+      expect(result).toEqual({ results: expectedResult, count });
     });
   });
 });

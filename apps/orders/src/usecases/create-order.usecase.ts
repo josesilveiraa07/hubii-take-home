@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { Product } from 'apps/products/src/entities/product.entity';
 import { firstValueFrom } from 'rxjs';
@@ -21,17 +25,36 @@ export class CreateOrderUseCase {
 
     for (let i = 0; i < input.items.length; i++) {
       const item = input.items[i];
-      const product: Product = await firstValueFrom(
-        this.productsService.findOneById(item.productId),
-      );
+
+      let product: Product;
+
+      try {
+        product = await firstValueFrom(
+          this.productsService.findOneById(item.productId),
+        );
+      } catch (err) {
+        if (err.name === 'NotFoundException') {
+          throw new RpcException(
+            new NotFoundException(
+              `Product with id ${item.productId} not found`,
+            ),
+          );
+        }
+
+        throw new InternalServerErrorException();
+      }
 
       if (!product) {
-        throw new RpcException(`Product with id ${item.productId} not found`);
+        throw new RpcException(
+          new NotFoundException(`Product with id ${item.productId} not found`),
+        );
       }
 
       if (product.stockAmount < item.quantity) {
         throw new RpcException(
-          `Product with id ${item.productId} has no stock`,
+          new NotFoundException(
+            `Product with id ${item.productId} has no stock`,
+          ),
         );
       }
 
@@ -44,8 +67,8 @@ export class CreateOrderUseCase {
 
       const itemVolume = product.height * product.width * product.length;
 
-      volume += itemVolume;
-      weight += product.weight;
+      volume += itemVolume * item.quantity;
+      weight += product.weight * item.quantity;
     }
 
     const power = 1 / 3;

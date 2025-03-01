@@ -1,4 +1,4 @@
-import { PrismaDatabaseProvider } from '@app/database/providers/prisma-database.provider';
+import { PrismaOrdersDatabaseProvider } from '@app/database/providers/prisma-orders-database.provider';
 import { Injectable } from '@nestjs/common';
 import { CreateOrderDto } from '../../dto/create-order.dto';
 import { Order } from '../../entities/order.entity';
@@ -6,7 +6,7 @@ import { OrdersRepository } from '../orders.repository';
 
 @Injectable()
 export class PrismaOrdersRepository implements OrdersRepository {
-  constructor(private readonly prisma: PrismaDatabaseProvider) {}
+  constructor(private readonly prisma: PrismaOrdersDatabaseProvider) {}
 
   async create(data: CreateOrderDto): Promise<Order> {
     return await this.prisma.order.create({
@@ -30,11 +30,9 @@ export class PrismaOrdersRepository implements OrdersRepository {
     });
   }
 
-  async findOneById(id: string): Promise<Order | null> {
-    return await this.prisma.order.findUnique({
-      where: { id },
+  async findAll(): Promise<Order[]> {
+    return await this.prisma.order.findMany({
       include: {
-        items: { include: { product: true } },
         deliveryOptions: {
           select: {
             id: true,
@@ -45,5 +43,24 @@ export class PrismaOrdersRepository implements OrdersRepository {
         },
       },
     });
+  }
+
+  async findOneById(id: string): Promise<Order | null> {
+    return await this.prisma.order.findUnique({
+      where: { id },
+      include: {
+        deliveryOptions: {
+          select: {
+            id: true,
+            companyName: true,
+            estimatedArrival: true,
+            price: true,
+          },
+        },
+      },
+    });
+  }
+  async count(): Promise<number> {
+    return await this.prisma.order.count();
   }
 }

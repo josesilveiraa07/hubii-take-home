@@ -1,27 +1,11 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/orders-client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-model Product {
-  id          String      @id @default(uuid(7))
-  name        String
-  price       Float
-  description String
-  weight      Float
-  height      Float
-  width       Float
-  length      Float
-  stockAmount Int         @map("stock_amount")
-  createdAt   DateTime    @default(now()) @map("created_at")
-  updatedAt   DateTime    @updatedAt @map("updated_at")
-  orderItems  OrderItem[]
-
-  @@map("products")
 }
 
 model Order {
@@ -52,7 +36,6 @@ model OrderDeliveryOption {
 model OrderItem {
   id        String   @id @default(uuid(7))
   productId String   @map("product_id")
-  product   Product  @relation(fields: [productId], references: [id])
   quantity  Int
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

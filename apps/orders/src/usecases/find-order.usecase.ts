@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { OrdersRepository } from '../repositories/orders.repository';
 
@@ -10,7 +10,7 @@ export class FindOrderUseCase {
     const order = await this.ordersRepository.findOneById(orderId);
 
     if (!order) {
-      throw new RpcException('Order not found');
+      throw new RpcException(new NotFoundException('Order not found'));
     }
 
     return order;

@@ -1,6 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateOrderDto } from 'apps/orders/src/dto/create-order.dto';
+import { FindOrdersResponseDto } from 'apps/orders/src/dto/find-orders-response.dto';
 import { Order } from 'apps/orders/src/entities/order.entity';
 import { firstValueFrom, of } from 'rxjs';
 import { CreateOrderResponseDto } from './dto/create-order-response.dto';
@@ -106,6 +107,73 @@ describe('OrdersController', () => {
 
       expect(mockOrdersService.findOneById).toHaveBeenCalledWith(orderId);
       expect(result).toEqual(mockOrder);
+    });
+  });
+
+  describe('findAll', () => {
+    it('should call ordersService.findAll and return the list of orders', async () => {
+      const mockOrders: Order[] = [
+        {
+          id: 'order-1',
+          originZipcode: '12345-678',
+          destinationZipcode: '87654-321',
+          items: [
+            {
+              id: 'item-1',
+              productId: '1',
+              quantity: 2,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          ],
+          deliveryOptions: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 'order-2',
+          originZipcode: '12345-678',
+          destinationZipcode: '87654-321',
+          items: [
+            {
+              id: 'item-2',
+              productId: '2',
+              quantity: 1,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          ],
+          deliveryOptions: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+
+      const mockResponse: FindOrdersResponseDto = {
+        results: mockOrders,
+        count: mockOrders.length,
+      };
+
+      mockOrdersService.findAll.mockReturnValue(of(mockResponse));
+
+      const result = await firstValueFrom(controller.findAll());
+
+      expect(mockOrdersService.findAll).toHaveBeenCalled();
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should return an empty list if no orders are found', async () => {
+      const mockResponse: FindOrdersResponseDto = {
+        results: [],
+        count: 0,
+      };
+
+      mockOrdersService.findAll.mockReturnValue(of(mockResponse));
+
+      const result = await firstValueFrom(controller.findAll());
+
+      expect(mockOrdersService.findAll).toHaveBeenCalled();
+      expect(result).toEqual(mockResponse);
     });
   });
 });

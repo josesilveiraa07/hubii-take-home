@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { CreateProductDto } from 'apps/products/src/dto/create-product.dto';
 import { UpdateProductDto } from 'apps/products/src/dto/update-product.dto';
 import { Product } from 'apps/products/src/entities/product.entity';
-import { catchError, of } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { FindProductsResponseDto } from './dto/find-products-response.dto';
 
 @Injectable()
@@ -16,7 +16,9 @@ export class ProductsService {
     return this.productsClient
       .send<Product>('products.create', data)
       .pipe(
-        catchError((val: { message: string }) => of({ error: val.message })),
+        catchError((val: { response: Error }) =>
+          throwError(() => val.response),
+        ),
       );
   }
 
@@ -24,7 +26,9 @@ export class ProductsService {
     return this.productsClient
       .send<FindProductsResponseDto>('products.findAll', {})
       .pipe(
-        catchError((val: { message: string }) => of({ error: val.message })),
+        catchError((val: { response: Error }) =>
+          throwError(() => val.response),
+        ),
       );
   }
 
@@ -32,7 +36,9 @@ export class ProductsService {
     return this.productsClient
       .send<Product>('products.findOne', id)
       .pipe(
-        catchError((val: { message: string }) => of({ error: val.message })),
+        catchError((val: { response: Error }) =>
+          throwError(() => val.response),
+        ),
       );
   }
 
@@ -43,7 +49,9 @@ export class ProductsService {
         id,
       })
       .pipe(
-        catchError((val: { message: string }) => of({ error: val.message })),
+        catchError((val: { response: Error }) =>
+          throwError(() => val.response),
+        ),
       );
   }
 
@@ -51,7 +59,9 @@ export class ProductsService {
     return this.productsClient
       .send<void>('products.delete', id)
       .pipe(
-        catchError((val: { message: string }) => of({ error: val.message })),
+        catchError((val: { response: Error }) =>
+          throwError(() => val.response),
+        ),
       );
   }
 
@@ -62,7 +72,9 @@ export class ProductsService {
         quantity,
       })
       .pipe(
-        catchError((val: { message: string }) => of({ error: val.message })),
+        catchError((val: { response: Error }) =>
+          throwError(() => val.response),
+        ),
       );
   }
 
@@ -73,7 +85,9 @@ export class ProductsService {
         quantity,
       })
       .pipe(
-        catchError((val: { message: string }) => of({ error: val.message })),
+        catchError((val: { response: Error }) =>
+          throwError(() => val.response),
+        ),
       );
   }
 }

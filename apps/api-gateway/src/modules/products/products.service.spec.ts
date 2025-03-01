@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateProductDto } from 'apps/products/src/dto/create-product.dto';
 import { UpdateProductDto } from 'apps/products/src/dto/update-product.dto';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { ProductsService } from './products.service';
 
 describe('ProductsService', () => {
@@ -51,6 +51,33 @@ describe('ProductsService', () => {
       );
       expect(result).toBeDefined();
     });
+
+    it('should return an error object if the microservice call fails', () => {
+      const createProductDto: CreateProductDto = {
+        name: 'Product 1',
+        description: 'Description of Product 1',
+        price: 100,
+        height: 10,
+        width: 10,
+        length: 10,
+        weight: 1,
+        stockAmount: 10,
+      };
+
+      const errorMessage = 'Failed to create product';
+      mockProductsClient.send.mockReturnValue(
+        throwError(() => ({ message: errorMessage })),
+      );
+
+      service.create(createProductDto).subscribe((response) => {
+        expect(response).toEqual({ error: errorMessage });
+      });
+
+      expect(mockProductsClient.send).toHaveBeenCalledWith(
+        'products.create',
+        createProductDto,
+      );
+    });
   });
 
   describe('findAll', () => {
@@ -64,6 +91,22 @@ describe('ProductsService', () => {
         {},
       );
       expect(result).toBeDefined();
+    });
+
+    it('should return an error object if the microservice call fails', () => {
+      const errorMessage = 'Failed to find products';
+      mockProductsClient.send.mockReturnValue(
+        throwError(() => ({ message: errorMessage })),
+      );
+
+      service.findAll().subscribe((response) => {
+        expect(response).toEqual({ error: errorMessage });
+      });
+
+      expect(mockProductsClient.send).toHaveBeenCalledWith(
+        'products.findAll',
+        {},
+      );
     });
   });
 
@@ -80,6 +123,24 @@ describe('ProductsService', () => {
         productId,
       );
       expect(result).toBeDefined();
+    });
+
+    it('should return an error object if the microservice call fails', () => {
+      const productId = 'product-1';
+
+      const errorMessage = 'Failed to find product';
+      mockProductsClient.send.mockReturnValue(
+        throwError(() => ({ message: errorMessage })),
+      );
+
+      service.findOneById(productId).subscribe((response) => {
+        expect(response).toEqual({ error: errorMessage });
+      });
+
+      expect(mockProductsClient.send).toHaveBeenCalledWith(
+        'products.findOne',
+        productId,
+      );
     });
   });
 
@@ -103,6 +164,30 @@ describe('ProductsService', () => {
       });
       expect(result).toBeDefined();
     });
+
+    it('should return an error object if the microservice call fails', () => {
+      const productId = 'product-1';
+      const updateProductDto: UpdateProductDto = {
+        id: productId,
+        name: 'Updated Product 1',
+        description: 'Updated Description',
+        price: 150,
+      };
+
+      const errorMessage = 'Failed to update product';
+      mockProductsClient.send.mockReturnValue(
+        throwError(() => ({ message: errorMessage })),
+      );
+
+      service.update(productId, updateProductDto).subscribe((response) => {
+        expect(response).toEqual({ error: errorMessage });
+      });
+
+      expect(mockProductsClient.send).toHaveBeenCalledWith('products.update', {
+        ...updateProductDto,
+        id: productId,
+      });
+    });
   });
 
   describe('delete', () => {
@@ -118,6 +203,24 @@ describe('ProductsService', () => {
         productId,
       );
       expect(result).toBeDefined();
+    });
+
+    it('should return an error object if the microservice call fails', () => {
+      const productId = 'product-1';
+
+      const errorMessage = 'Failed to delete product';
+      mockProductsClient.send.mockReturnValue(
+        throwError(() => ({ message: errorMessage })),
+      );
+
+      service.delete(productId).subscribe((response) => {
+        expect(response).toEqual({ error: errorMessage });
+      });
+
+      expect(mockProductsClient.send).toHaveBeenCalledWith(
+        'products.delete',
+        productId,
+      );
     });
   });
 
@@ -139,6 +242,28 @@ describe('ProductsService', () => {
       );
       expect(result).toBeDefined();
     });
+
+    it('should return an error object if the microservice call fails', () => {
+      const productId = 'product-1';
+      const quantity = 5;
+
+      const errorMessage = 'Failed to add stock';
+      mockProductsClient.send.mockReturnValue(
+        throwError(() => ({ message: errorMessage })),
+      );
+
+      service.addToStock(productId, quantity).subscribe((response) => {
+        expect(response).toEqual({ error: errorMessage });
+      });
+
+      expect(mockProductsClient.send).toHaveBeenCalledWith(
+        'products.addStock',
+        {
+          id: productId,
+          quantity,
+        },
+      );
+    });
   });
 
   describe('removeFromStock', () => {
@@ -155,6 +280,25 @@ describe('ProductsService', () => {
         { id: productId, quantity },
       );
       expect(result).toBeDefined();
+    });
+
+    it('should return an error object if the microservice call fails', () => {
+      const productId = 'product-1';
+      const quantity = 5;
+
+      const errorMessage = 'Failed to remove stock';
+      mockProductsClient.send.mockReturnValue(
+        throwError(() => ({ message: errorMessage })),
+      );
+
+      service.removeFromStock(productId, quantity).subscribe((response) => {
+        expect(response).toEqual({ error: errorMessage });
+      });
+
+      expect(mockProductsClient.send).toHaveBeenCalledWith(
+        'products.removeStock',
+        { id: productId, quantity },
+      );
     });
   });
 });

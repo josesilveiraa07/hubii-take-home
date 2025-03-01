@@ -94,7 +94,7 @@ describe('RemoveFromStockUseCase', () => {
         width: 10,
         height: 10,
         length: 10,
-        stockAmount: 10, // Estoque suficiente
+        stockAmount: 10,
         createdAt: new Date(),
         updatedAt: new Date(),
       });

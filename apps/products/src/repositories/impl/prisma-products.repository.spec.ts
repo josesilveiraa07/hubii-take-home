@@ -1,4 +1,4 @@
-import { PrismaDatabaseProvider } from '@app/database/providers/prisma-database.provider';
+import { PrismaProductsDatabaseProvider } from '@app/database/providers/prisma-products-database.provider';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateProductDto } from '../../dto/create-product.dto';
@@ -9,14 +9,14 @@ import { PrismaProductsRepository } from './prisma-products.repository';
 
 describe('PrismaProductsRepository', () => {
   let repository: PrismaProductsRepository;
-  const mockPrisma = createMock<PrismaDatabaseProvider>();
+  const mockPrisma = createMock<PrismaProductsDatabaseProvider>();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PrismaProductsRepository,
         {
-          provide: PrismaDatabaseProvider,
+          provide: PrismaProductsDatabaseProvider,
           useValue: mockPrisma,
         },
       ],
@@ -231,7 +231,7 @@ describe('PrismaProductsRepository', () => {
         name: 'Product 1',
         description: 'Description of Product 1',
         price: 100,
-        stockAmount: 5, // Estoque reduzido
+        stockAmount: 5,
         height: 10,
         length: 10,
         weight: 1,
@@ -266,7 +266,7 @@ describe('PrismaProductsRepository', () => {
         name: 'Product 1',
         description: 'Description of Product 1',
         price: 100,
-        stockAmount: 20, // Estoque atualizado
+        stockAmount: 20,
         height: 10,
         length: 10,
         weight: 1,

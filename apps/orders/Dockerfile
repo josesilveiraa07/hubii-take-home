@@ -10,7 +10,7 @@ RUN pnpm install
 
 COPY . .
 
-RUN pnpm prisma generate
+RUN pnpm db:generate:orders
 
 FROM base AS build
 
