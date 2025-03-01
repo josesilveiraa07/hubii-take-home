@@ -1,5 +1,16 @@
 # Requisitos Funcionais
 
+## Set-up inicial
+
+```bash
+$ git clone https://github.com/josesilveiraa07/hubii-take-home # clona o repositório
+$ cd hubii-take-home # entra no diretório do repositório
+$ pnpm install # instala as dependências utilizando o pnpm
+$ pnpm compose:dev # roda todos os containers necessários para a aplicação subir
+```
+
+Após esses passos, a documentação com tipos e retornos estará disponível no endereço http://localhost:3000/docs.
+
 ## Microsserviço de Produtos
 
 - **CRUD de Produtos**: Implementação completa de operações de criação, leitura, atualização e exclusão de produtos.
