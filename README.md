@@ -4,6 +4,13 @@
 
 ```bash
 $ git clone https://github.com/josesilveiraa07/hubii-take-home # clona o repositório
+```
+
+1. Criar todos os arquivos com base nos arquivos .env.example, apps/api-gateway/.env.example, apps/orders/.env.example e apps/products/.env.example
+   no mesmo lugar dos arquivos mencionados, mas com o nome .env.development.
+2. Alterar os valores das variáveis de ambiente.
+
+```bash
 $ cd hubii-take-home # entra no diretório do repositório
 $ pnpm install # instala as dependências utilizando o pnpm
 $ pnpm compose:dev # roda todos os containers necessários para a aplicação subir
