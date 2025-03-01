@@ -9,18 +9,18 @@
     "schema": "prisma/schema.prisma"
   },
   "scripts": {
-    "build": "nest build --all",
+    "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "start:api-gateway:dev": "nest start api-gateway --watch",
-    "start:orders:dev": "nest start orders --watch",
-    "start:products:dev": "nest start products --watch",
+    "start:api-gateway:dev": "NODE_ENV=development nest start api-gateway --watch",
+    "start:orders:dev": "NODE_ENV=development pnpm prisma generate && pnpm db:migrate:dev && nest start orders --watch",
+    "start:products:dev": "NODE_ENV=development pnpm prisma generate && pnpm db:migrate:dev && nest start products --watch",
     "start:api-gateway:prod": "node dist/apps/api-gateway/main",
     "start:orders:prod": "node dist/apps/orders/main",
     "start:products:prod": "node dist/apps/products/main",
     "db:migrate:dev": "dotenv -e .env.development -- prisma migrate dev",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "compose:dev": "docker-compose -f docker-compose.development.yaml up",
+    "compose:dev": "docker-compose -f docker-compose.development.yaml up --build",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -38,6 +38,8 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.0.6",
     "@prisma/client": "6.4.1",
+    "amqp-connection-manager": "^4.1.14",
+    "amqplib": "^0.10.5",
     "axios": "^1.8.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -89,11 +91,20 @@
     },
     "moduleNameMapper": {
       "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+      "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
       "apps/(.*)": "<rootDir>/apps/$1",
       "libs/(.*)": "<rootDir>/libs/$1"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/.*\\.module\\.ts$",
+      "<rootDir>/.*\\.dto\\.ts$",
+      "<rootDir>/.*\\.entity\\.ts$",
+      "<rootDir>/.*\\.filter\\.ts$",
+      "<rootDir>/.*\\main\\.ts$",
+      "<rootDir>/.*\\.config\\.ts$"
     ],
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",

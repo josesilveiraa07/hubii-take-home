@@ -1,0 +1,60 @@
+networks:
+  isolation-network:
+    driver: bridge
+
+services:
+  database:
+    container_name: database
+    image: postgres:13
+    ports:
+      - '5432:5432'
+    networks:
+      - isolation-network
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: hubii
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - isolation-network
+  api-gateway:
+    container_name: api-gateway
+    build:
+      dockerfile: ./apps/api-gateway/Dockerfile
+      target: development
+    ports:
+      - '3000:3000'
+    networks:
+      - isolation-network
+    depends_on:
+      - orders
+      - products
+  orders:
+    container_name: orders
+    build:
+      dockerfile: ./apps/orders/Dockerfile
+      target: development
+    ports:
+      - '3002:3002'
+    networks:
+      - isolation-network
+    depends_on:
+      - rabbitmq
+      - database
+  products:
+    container_name: products
+    build:
+      dockerfile: ./apps/products/Dockerfile
+      target: development
+    ports:
+      - '3001:3001'
+    networks:
+      - isolation-network
+    depends_on:
+      - rabbitmq
+      - database

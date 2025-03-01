@@ -7,9 +7,11 @@ import { ProductsService } from './products.service';
     ClientsModule.register([
       {
         name: 'PRODUCTS_SERVICE',
-        transport: Transport.TCP,
+        transport: Transport.RMQ,
         options: {
-          port: 3001,
+          urls: ['amqp://guest:guest@rabbitmq:5672'],
+          queue: 'products_queue',
+          queueOptions: { durable: false },
         },
       },
     ]),

@@ -7,7 +7,7 @@ import { ProductsModule } from './modules/products/products.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `${__dirname}/../../.env.${process.env.NODE_ENV || 'development'}`,
+      envFilePath: `./apps/api-gateway/.env.${process.env.NODE_ENV || 'development'}`,
     }),
     ProductsModule,
     OrdersModule,

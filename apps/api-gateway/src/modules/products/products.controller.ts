@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import {
@@ -14,8 +15,8 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { UpdateProductDto } from 'apps/products/src/dto/update-product.dto';
 import { CreateProductDto } from '../../../../products/src/dto/create-product.dto';
-import { UpdateProductDto } from '../../../../products/src/dto/update-product.dto';
 import { Product } from '../../../../products/src/entities/product.entity';
 import { AddStockDto } from './dto/add-stock.dto';
 import { FindProductsResponseDto } from './dto/find-products-response.dto';
@@ -54,12 +55,19 @@ export class ProductsController {
     return this.productsService.findOneById(id);
   }
 
+  /** Atualizar um produto pelo ID */
+  @Patch(':id')
+  @ApiOkResponse({ type: Product, description: 'Retorna o produto atualizado' })
+  update(@Param('id') id: string, @Body() data: UpdateProductDto) {
+    return this.productsService.update(id, data);
+  }
+
   /** Deletar produto */
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse({ description: 'Produto deletado com sucesso' })
-  update(@Param('id') id: string, @Body() data: UpdateProductDto) {
-    return this.productsService.update(id, data);
+  delete(@Param('id') id: string) {
+    return this.productsService.delete(id);
   }
 
   /** Adicionar ao estoque do produto */

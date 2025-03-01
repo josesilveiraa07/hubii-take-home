@@ -33,6 +33,8 @@ describe('FindOrderUseCase', () => {
 
     const mockOrder: Order = {
       id: orderId,
+      originZipcode: '12345-678',
+      destinationZipcode: '12345-678',
       items: [
         {
           id: 'item-1',

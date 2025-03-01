@@ -1,5 +1,5 @@
+import { PrismaDatabaseProvider } from '@app/database/providers/prisma-database.provider';
 import { Injectable } from '@nestjs/common';
-import { PrismaDatabaseProvider } from 'libs/common/database/providers/prisma-database.provider';
 import { CreateOrderDto } from '../../dto/create-order.dto';
 import { Order } from '../../entities/order.entity';
 import { OrdersRepository } from '../orders.repository';

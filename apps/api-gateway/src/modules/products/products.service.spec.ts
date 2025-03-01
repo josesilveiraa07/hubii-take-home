@@ -120,4 +120,41 @@ describe('ProductsService', () => {
       expect(result).toBeDefined();
     });
   });
+
+  describe('addToStock', () => {
+    it('should send a message to the products microservice to add stock', () => {
+      const productId = 'product-1';
+      const quantity = 5;
+
+      mockProductsClient.send.mockReturnValue(of(undefined));
+
+      const result = service.addToStock(productId, quantity);
+
+      expect(mockProductsClient.send).toHaveBeenCalledWith(
+        'products.addStock',
+        {
+          id: productId,
+          quantity,
+        },
+      );
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe('removeFromStock', () => {
+    it('should send a message to the products microservice to remove stock', () => {
+      const productId = 'product-1';
+      const quantity = 5;
+
+      mockProductsClient.send.mockReturnValue(of(undefined));
+
+      const result = service.removeFromStock(productId, quantity);
+
+      expect(mockProductsClient.send).toHaveBeenCalledWith(
+        'products.removeStock',
+        { id: productId, quantity },
+      );
+      expect(result).toBeDefined();
+    });
+  });
 });

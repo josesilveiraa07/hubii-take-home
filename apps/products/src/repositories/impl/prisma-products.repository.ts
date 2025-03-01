@@ -1,5 +1,5 @@
+import { PrismaDatabaseProvider } from '@app/database/providers/prisma-database.provider';
 import { Injectable } from '@nestjs/common';
-import { PrismaDatabaseProvider } from 'libs/common/database/providers/prisma-database.provider';
 import { CreateProductDto } from '../../dto/create-product.dto';
 import { SubtractFromStockDto } from '../../dto/subtract-from-stock.dto';
 import { UpdateProductDto } from '../../dto/update-product.dto';

@@ -1,6 +1,6 @@
+import { DatabaseModule } from '@app/database/database.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from 'libs/common/database/database.module';
 import deliveryConfigProvider from './common/config/delivery.config';
 import { DeliveryCalculationModule } from './common/shared/modules/delivery-calculation.module';
 import { ProductsModule } from './modules/products.module';
@@ -13,7 +13,7 @@ const usecaseProviders = Object.values(usecases);
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `${__dirname}/../../../.env.${process.env.NODE_ENV || 'development'}`,
+      envFilePath: `./apps/orders/.env.${process.env.NODE_ENV || 'development'}`,
       load: [deliveryConfigProvider],
     }),
     DatabaseModule,

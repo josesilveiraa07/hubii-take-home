@@ -15,6 +15,9 @@ export class Order {
   items?: OrderItem[];
   deliveryOptions?: OrderDeliveryOptions[];
 
+  originZipcode: string;
+  destinationZipcode: string;
+
   createdAt: Date;
   updatedAt: Date;
 

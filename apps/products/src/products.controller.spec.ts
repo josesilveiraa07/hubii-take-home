@@ -1,6 +1,6 @@
+import { DatabaseModule } from '@app/database/database.module';
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { DatabaseModule } from 'libs/common/database/database.module';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductsController } from './products.controller';
@@ -297,6 +297,138 @@ describe('ProductsController', () => {
           amount: quantity,
         }),
       ).rejects.toThrow();
+    });
+
+    describe('addStock', () => {
+      it('should add to stock amount', async () => {
+        const product = new Product({
+          id: crypto.randomUUID(),
+          description: 'Product description',
+          name: 'Product name',
+          price: 100.5,
+          stockAmount: 50,
+          width: 10,
+          height: 10,
+          length: 10,
+          weight: 10,
+        });
+
+        const quantity = 10;
+
+        const updatedProduct = new Product({
+          id: product.id,
+          description: product.description,
+          name: product.name,
+          price: product.price,
+          stockAmount: product.stockAmount + quantity,
+          width: 10,
+          height: 10,
+          length: 10,
+          weight: 10,
+        });
+
+        mockProductsRepository.incrementOrDecrementStock.mockResolvedValue(
+          updatedProduct,
+        );
+
+        const result = await productsController.addStock({
+          id: product.id,
+          quantity,
+        });
+
+        expect(result).toEqual(updatedProduct);
+        expect(
+          mockProductsRepository.incrementOrDecrementStock,
+        ).toHaveBeenCalledWith(product.id, quantity);
+      });
+
+      it('should throw if the product is not found', async () => {
+        const id = crypto.randomUUID();
+        const quantity = 10;
+
+        mockProductsRepository.findOneById.mockResolvedValueOnce(null);
+
+        await expect(
+          productsController.addStock({ id, quantity }),
+        ).rejects.toThrow();
+      });
+    });
+
+    describe('removeFromStock', () => {
+      it('should remove from stock amount', async () => {
+        const product = new Product({
+          id: crypto.randomUUID(),
+          description: 'Product description',
+          name: 'Product name',
+          price: 100.5,
+          stockAmount: 50,
+          width: 10,
+          height: 10,
+          length: 10,
+          weight: 10,
+        });
+
+        const quantity = 10;
+
+        const updatedProduct = new Product({
+          id: product.id,
+          description: product.description,
+          name: product.name,
+          price: product.price,
+          stockAmount: product.stockAmount - quantity,
+          width: 10,
+          height: 10,
+          length: 10,
+          weight: 10,
+        });
+
+        mockProductsRepository.incrementOrDecrementStock.mockResolvedValue(
+          updatedProduct,
+        );
+
+        const result = await productsController.removeFromStock({
+          id: product.id,
+          quantity,
+        });
+
+        expect(result).toEqual(updatedProduct);
+        expect(
+          mockProductsRepository.incrementOrDecrementStock,
+        ).toHaveBeenCalledWith(product.id, -quantity);
+      });
+
+      it('should throw if the product is not found', async () => {
+        const id = crypto.randomUUID();
+        const quantity = 10;
+
+        mockProductsRepository.findOneById.mockResolvedValueOnce(null);
+
+        await expect(
+          productsController.removeFromStock({ id, quantity }),
+        ).rejects.toThrow();
+      });
+
+      it('should throw if there is not enough stock', async () => {
+        const product = new Product({
+          id: crypto.randomUUID(),
+          description: 'Product description',
+          name: 'Product name',
+          price: 100.5,
+          stockAmount: 5,
+          width: 10,
+          height: 10,
+          length: 10,
+          weight: 10,
+        });
+
+        const quantity = 10;
+
+        mockProductsRepository.findOneById.mockResolvedValueOnce(product);
+
+        await expect(
+          productsController.removeFromStock({ id: product.id, quantity }),
+        ).rejects.toThrow();
+      });
     });
   });
 });

@@ -1,6 +1,7 @@
-import { PartialType } from '@nestjs/swagger';
+import { ApiHideProperty, PartialType } from '@nestjs/swagger';
 import { CreateProductDto } from './create-product.dto';
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
+  @ApiHideProperty()
   id: string;
 }

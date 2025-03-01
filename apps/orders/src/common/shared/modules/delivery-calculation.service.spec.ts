@@ -59,7 +59,7 @@ describe('MelhorEnvioDeliveryCalculationService', () => {
           },
           price: 60.0,
           currency: 'R$',
-          delivery_time: 3,
+          delivery_time: 1,
         },
       ];
 
@@ -88,7 +88,7 @@ describe('MelhorEnvioDeliveryCalculationService', () => {
           price: 50.0,
         },
         'Transportadora B': {
-          deliveryTime: '3 dias úteis',
+          deliveryTime: '1 dia útil',
           price: 60.0,
         },
       });
