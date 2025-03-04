@@ -103,7 +103,9 @@
       "<rootDir>/.*\\.filter\\.ts$",
       "<rootDir>/.*\\main\\.ts$",
       "<rootDir>/.*\\.config\\.ts$",
-      "<rootDir>/libs/database/src/index.ts"
+      "<rootDir>/libs/database/src/index.ts",
+      "<rootDir>/apps/orders/prisma/generated/*",
+      "<rootDir>/apps/products/prisma/generated/*"
     ],
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
