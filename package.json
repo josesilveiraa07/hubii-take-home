@@ -14,7 +14,7 @@
     "start:products:dev": "NODE_ENV=development pnpm db:generate:products && pnpm db:migrate:products:dev && nest start products --watch",
     "db:migrate:orders:dev": "dotenv -e apps/orders/.env.development -- pnpm prisma migrate dev --schema apps/orders/prisma/schema.prisma",
     "db:migrate:products:dev": "dotenv -e apps/products/.env.development -- pnpm prisma migrate dev --schema apps/products/prisma/schema.prisma",
-    "db:generate": "pnpm generate:orders && pnpm generate:products",
+    "db:generate": "pnpm db:generate:orders && pnpm db:generate:products",
     "db:generate:orders": "pnpm prisma generate --schema apps/orders/prisma/schema.prisma",
     "db:generate:products": "pnpm prisma generate --schema apps/products/prisma/schema.prisma",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
